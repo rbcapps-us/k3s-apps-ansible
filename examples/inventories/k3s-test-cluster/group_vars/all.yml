@@ -1,0 +1,4 @@
+# This cluster uses sudo.ws.  Without the next line, all tasks with "become: true" will fail.
+ansible_become_exe: /usr/bin/sudo.ws
+
+
