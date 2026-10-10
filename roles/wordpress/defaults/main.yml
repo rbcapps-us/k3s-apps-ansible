@@ -1,0 +1,9 @@
+---
+kube_api_user: k3s
+kubeconfig: ""
+wordpress_chart_repo_url: https://repo.helmforge.dev
+wordpress_chart_version: ""
+wordpress_release_name: wordpress
+wordpress_namespace: wordpress
+wordpress_values: {}
+wordpress_wait_timeout: 10m

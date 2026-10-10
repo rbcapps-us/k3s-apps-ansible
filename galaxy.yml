@@ -1,0 +1,23 @@
+---
+namespace: roncemer
+name: k3s_apps
+version: 1.0.0
+readme: README.md
+authors:
+  - Ron Cemer
+description: Helm-based application installation for k3s clusters.
+license:
+  - MIT
+tags:
+  - kubernetes
+  - k3s
+  - helm
+  - database
+  - wordpress
+dependencies:
+  kubernetes.core: ">=6.5.0"
+repository: https://github.com/roncemer/k3s-apps-ansible
+issues: https://github.com/roncemer/k3s-apps-ansible/issues
+build_ignore:
+  - .github
+  - "*.tar.gz"

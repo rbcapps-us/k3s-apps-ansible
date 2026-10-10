@@ -1,0 +1,22 @@
+---
+- name: Install CloudNativePG as the Kubernetes API user
+  become: true
+  become_user: "{{ kube_api_user }}"
+  block:
+    - name: Add the CloudNativePG Helm repository
+      kubernetes.core.helm_repository:
+        name: cnpg
+        repo_url: "{{ cloudnativepg_chart_repo_url }}"
+
+    - name: Install the CloudNativePG operator
+      kubernetes.core.helm:
+        name: "{{ cloudnativepg_release_name }}"
+        chart_ref: cnpg/cloudnative-pg
+        chart_version: "{{ cloudnativepg_chart_version | default(omit, true) }}"
+        release_namespace: "{{ cloudnativepg_namespace }}"
+        create_namespace: true
+        kubeconfig: "{{ kubeconfig | default(omit, true) }}"
+        values: "{{ cloudnativepg_values }}"
+        update_repo_cache: true
+        wait: true
+        timeout: "{{ cloudnativepg_wait_timeout }}"

@@ -1,0 +1,9 @@
+---
+kube_api_user: k3s
+kubeconfig: ""
+cloudnativepg_chart_repo_url: https://cloudnative-pg.github.io/charts
+cloudnativepg_chart_version: ""
+cloudnativepg_release_name: cnpg
+cloudnativepg_namespace: cnpg-system
+cloudnativepg_values: {}
+cloudnativepg_wait_timeout: 10m

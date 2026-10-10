@@ -1,0 +1,6 @@
+---
+- name: Install Helmforge WordPress
+  hosts: k3s
+  gather_facts: false
+  roles:
+    - roncemer.k3s_apps.wordpress

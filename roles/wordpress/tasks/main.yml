@@ -1,0 +1,23 @@
+---
+- name: Install WordPress as the Kubernetes API user
+  become: true
+  become_user: "{{ kube_api_user }}"
+  block:
+    - name: Add the Helmforge Helm repository
+      kubernetes.core.helm_repository:
+        name: helmforge
+        repo_url: "{{ wordpress_chart_repo_url }}"
+
+    - name: Install Helmforge WordPress
+      kubernetes.core.helm:
+        name: "{{ wordpress_release_name }}"
+        chart_ref: helmforge/wordpress
+        chart_version: "{{ wordpress_chart_version | default(omit, true) }}"
+        release_namespace: "{{ wordpress_namespace }}"
+        create_namespace: true
+        kubeconfig: "{{ kubeconfig | default(omit, true) }}"
+        values: "{{ wordpress_values }}"
+        update_repo_cache: true
+        wait: true
+        timeout: "{{ wordpress_wait_timeout }}"
+      no_log: true
