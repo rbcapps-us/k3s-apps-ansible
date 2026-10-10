@@ -1,7 +1,7 @@
 - name: "CloudNativePG Cluster deployment"
   run_once: true
   become: true
-  become_user: '{{ k3s_user }}'
+  become_user: '{{ kube_api_user }}'
   vars:
     cloud_native_pg_superuser_creds_secret_name: "{{ database_cluster_name }}-app-superuser-creds"
     cloud_native_pg_app_user_creds_secret_name: "{{ database_cluster_name }}-app-user-creds"
@@ -86,7 +86,6 @@
           changed_when: "cloud_native_pg_cluster_apply_result.rc == 99"
           failed_when: "cloud_native_pg_cluster_apply_result.rc not in [0, 99]"
 
-
         - name: "Create the CloudNativePG externally-accessible Service"
           when: expose_postgresql_port_externally
           block:
@@ -116,7 +115,6 @@
               register: cloud_native_pg_externally_accessible_service_apply_result
               changed_when: "cloud_native_pg_externally_accessible_service_apply_result.rc == 99"
               failed_when: "cloud_native_pg_externally_accessible_service_apply_result.rc not in [0, 99]"
-
 
         - name: "Delete the CloudNativePG externally-accessible Service, if it exists"
           when: "not expose_postgresql_port_externally"

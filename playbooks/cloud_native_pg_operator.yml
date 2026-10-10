@@ -2,5 +2,7 @@
   hosts: all_hosts
 
   roles:
+    - role: init
+      tags: [always]
     - role: cloud_native_pg_operator
       tags: [cloud_native_pg_operator]

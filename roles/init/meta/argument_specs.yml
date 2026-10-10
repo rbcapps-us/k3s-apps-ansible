@@ -17,8 +17,8 @@ argument_specs:
           nodes versus agent nodes.
           Because of this, the roles rely on the unfiltered inventory hosts list, which is why the k3s_hosts_group fact exists.
         type: str
-      k3s_user:
+      kube_api_user:
         description: |
-          Username for the k3s user.
-          This must be a user which has a $HOME/.kube/config installed which allows it to access the Kubernetes API.'
+          Username for the Kubernetes API user.
+          This must be a user which has a $HOME/.kube/config installed which allows it to access the Kubernetes API.
         type: str
