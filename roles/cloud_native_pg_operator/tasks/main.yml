@@ -1,0 +1,38 @@
+- name: "CloudNativePG Kubernetes Operator installation or upgrade"
+  run_once: true
+  become: true
+  become_user: '{{ k3s_user }}'
+  block:
+    - name: "Install or update the CloudNativePG Kubernetes Operator"
+      ansible.builtin.shell:
+        cmd: |
+          set -euo pipefail
+
+          set +e
+          kubectl diff -f {{ cloud_native_pg_operator_installer_manifest_uri | quote }}
+          retval="$?"
+          set -e
+
+          if [ "$retval" -ne 0 ]; then
+              kubectl apply -f {{ cloud_native_pg_operator_installer_manifest_uri | quote }}
+              exit 99
+          fi
+      args:
+        executable: /bin/bash
+      register: cloud_native_pg_operator_apply_result
+      changed_when: "cloud_native_pg_operator_apply_result.rc == 99"
+      failed_when: "cloud_native_pg_operator_apply_result.rc not in [0, 99]"
+
+    - name: "Wait for the CloudNativePG operator deployment to be ready"
+      run_once: true
+      become: true
+      become_user: '{{ k3s_user }}'
+      ansible.builtin.shell:
+        cmd: |
+          set -e
+          set -o pipefail
+
+          kubectl -n cnpg-system wait deployment.apps/cnpg-controller-manager --for condition=Available=True --timeout=300s
+      args:
+        executable: /bin/bash
+      changed_when: false

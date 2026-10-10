@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -e
+
+cd $(dirname "$0")
+
+final_retval=0
+
+echo "Validating playbooks..."
+find playbooks -type f \( -name "*.yaml" -o -name "*.yml" \) -maxdepth 1 -print0 | xargs -0 ansible-lint
+retval="$?"
+if [ "$retval" -ne 0 ] && [ "$final_retval" -eq 0 ]; then
+    final_retval="$retval"
+fi
+
+echo "Validating roles..."
+find roles -type f \( -name "*.yaml" -o -name "*.yml" \) -maxdepth 3 -print0 | xargs -0 ansible-lint
+retval="$?"
+if [ "$retval" -ne 0 ] && [ "$final_retval" -eq 0 ]; then
+    final_retval="$retval"
+fi
+
+if [ "$final_retval" -eq 0 ]; then
+    echo "SUCCESS!"
+else
+    echo "One or more playbooks or roles failed lint validation." >&2
+fi
+
+exit "$final_retval"

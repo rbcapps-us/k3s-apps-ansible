@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Secret
+metadata:
+{{ cloud_native_pg_superuser_creds_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+type: kubernetes.io/basic-auth
+data:
+{{ cloud_native_pg_superuser_creds_data | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+{{ cloud_native_pg_app_user_creds_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+type: kubernetes.io/basic-auth
+data:
+{{ cloud_native_pg_app_user_creds_data | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+
+---
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+{{ cloud_native_pg_manifest_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+spec:
+  instances: 3
+  storage:
+    size: 2Ti
+  ephemeralVolumesSizeLimit:
+    shm: 512Mi
+  superuserSecret:
+    name: {{ cloud_native_pg_superuser_creds_secret_name | to_yaml | trim }}
+  enableSuperuserAccess: true
+  bootstrap:
+    initdb:
+{{ cloud_native_pg_manifest_bootstrap_initdb | to_nice_yaml(indent=2, sort_keys=false) | indent(width=6, first=true) }}
+{%if (cloud_native_pg_projected_volume_template_sources | length) > 0 %}
+  projectedVolumeTemplate:
+    sources:
+{{ cloud_native_pg_projected_volume_template_sources | to_nice_yaml(indent=2, sort_keys=false) | indent(width=8, first=true) }}
+{% endif %}
+{% if enable_tls %}
+  certificates:
+{% if root_ca_cert_secret_name != "" %}
+    serverCASecret: {{ root_ca_cert_secret_name | to_yaml | trim }}
+{% endif %}
+    serverTLSSecret: {{ tls_secret_name | to_yaml | trim }}
+{% endif %}
+  postgresql:
+{% if enable_tls %}
+    pg_hba:
+      - hostssl all all all cert
+{% endif %}
+    parameters:
+{{ postgresql_config_parameters_render | to_nice_yaml(indent=2, sort_keys=false) | indent(width=6, first=true) }}
+  resources:
+    requests:
+      memory: {{ ((postgresql_pod_memory_gi | string) + "Gi") | to_yaml | trim }}
+    limits:
+      memory: {{ ((postgresql_pod_memory_gi | string) + "Gi") | to_yaml | trim }}

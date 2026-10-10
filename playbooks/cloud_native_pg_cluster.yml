@@ -1,0 +1,6 @@
+- name: "Install or upgrade a CloudNativePG Kubernetes Database Cluster"
+  hosts: all_hosts
+
+  roles:
+    - role: cloud_native_pg_cluster
+      tags: [cloud_native_pg_cluster]

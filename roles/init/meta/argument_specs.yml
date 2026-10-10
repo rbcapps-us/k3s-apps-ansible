@@ -1,0 +1,24 @@
+argument_specs:
+  main:
+    short_description: "Initialization/setup role for K3s Ansible Galaxy collection"
+    options:
+      k3s_hosts_group:
+        description: |
+          The inventory hosts group name for the nodes in the k3s cluster.
+          This *MUST* match the inventory hosts group name used in the playbooks.
+          Note that if you change this, the provided playbooks will fail, because their hosts attribute is set to match the
+          default value for this fact.
+          Changing this value requires writing your own playbooks, adapted from the provided playbooks, and matching their
+          hosts attribute to the value of this fact.
+          This is necessary because Ansible does not provide a way to get the unfiltered list of inventory hosts.
+          The best it can muster is ansible_play_hosts_all, which provides the list of all hosts in the current play,
+          but this may be filtered based on --limit (or -l) command-line argument.
+          If the filtered list were to be used, it would throw off the calculations for which nodes are considered server
+          nodes versus agent nodes.
+          Because of this, the roles rely on the unfiltered inventory hosts list, which is why the k3s_hosts_group fact exists.
+        type: str
+      k3s_user:
+        description: |
+          Username for the k3s user.
+          This must be a user which has a $HOME/.kube/config installed which allows it to access the Kubernetes API.'
+        type: str

@@ -1,0 +1,1 @@
+cloud_native_pg_operator_installer_manifest_uri: "https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-{{ (cloud_native_pg_operator_version | split('.') | list)[:2] | join('.') }}/releases/cnpg-{{ cloud_native_pg_operator_version }}.yaml"

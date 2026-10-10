@@ -1,0 +1,6 @@
+- name: "Install or upgrade the CloudNativePG Kubernetes Operator"
+  hosts: all_hosts
+
+  roles:
+    - role: cloud_native_pg_operator
+      tags: [cloud_native_pg_operator]

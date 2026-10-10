@@ -1,2 +1,3 @@
-# k3s-apps-ansible
-Ansible roles and playbooks for installing various applications on a k3s cluster
+# Ansible Collection - roncemer.k3s_apps_ansible
+
+Documentation for the collection.
