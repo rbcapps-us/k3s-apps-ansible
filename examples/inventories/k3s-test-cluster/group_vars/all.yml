@@ -1,4 +1,31 @@
 # This cluster uses sudo.ws.  Without the next line, all tasks with "become: true" will fail.
 ansible_become_exe: /usr/bin/sudo.ws
 
-
+cnpg_kubernetes_namespace: "cnpg-test"
+cnpg_database_cluster_name: "cnpg-test-cluster"
+cnpg_expose_postgresql_port_externally: true
+cnpg_postgresql_external_port: 5432
+cnpg_enable_tls: false
+cnpg_root_ca_cert_secret_name: ""
+cnpg_tls_secret_name: ""
+cnpg_application_database: "cnpgtest"
+cnpg_application_user: "cnpgtestuser"
+cnpg_application_password: "cnpgtestpassword123"
+cnpg_postgresql_pod_memory_gi: 1
+cnpg_postgresql_config_parameters:
+  max_connections: "1000"
+  shared_buffers: "32MB"
+  effective_cache_size: "32MB"
+  maintenance_work_mem: "32MB"
+  checkpoint_completion_target: "0.7"
+  wal_buffers: "16MB"
+  default_statistics_target: "100"
+  random_page_cost: "1.1"
+  effective_io_concurrency: "200"
+  work_mem: "6553kB"
+  min_wal_size: "80MB"
+  max_wal_size: "1GB"
+  max_worker_processes: "64"
+  max_parallel_workers_per_gather: "4"
+  max_parallel_workers: "64"
+  max_parallel_maintenance_workers: "4"

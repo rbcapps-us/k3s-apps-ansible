@@ -2,69 +2,75 @@ argument_specs:
   main:
     short_description: "The main entry point for the cloud_native_pg role."
     options:
-      kubernetes_namespace:
+      cnpg_kubernetes_namespace:
         type: "str"
         required: true
         description: "The Kubernetes namespace into which to install the CloudNativePG operator and cluster."
-      database_cluster_name:
+      cnpg_database_cluster_name:
         type: "str"
         required: true
         description: "The name of the CloudNativePG database cluster."
-      expose_postgresql_port_externally:
+      cnpg_expose_postgresql_port_externally:
         type: "bool"
         required: false
         description: "Set to true to expose the PostgreSQL port externally (on the cluster nodes)."
-      postgresql_external_port:
+      cnpg_postgresql_external_port:
         type: "int"
         required: false
-        description: "Port number on which to expose PostgreSQL externally (on the cluster nodes) if expose_postgresql_port_externally is true."
-      enable_tls:
+        description: "Port number on which to expose PostgreSQL externally (on the cluster nodes) if cnpg_expose_postgresql_port_externally is true."
+      cnpg_enable_tls:
         type: "bool"
         required: false
-        description: "Set to true, and pass tls_secret_name to enable TLS encryption for PostgreSQL."
-      root_ca_cert_secret_name:
+        description: "Set to true, and pass cnpg_tls_secret_name to enable TLS encryption for PostgreSQL."
+      cnpg_root_ca_cert_secret_name:
         type: "str"
         required: false
-        description: "The name of the secret containing the root CA certificate; ignored unless enable_tls is true."
-      tls_secret_name:
+        description: "The name of the secret containing the root CA certificate; ignored unless cnpg_enable_tls is true."
+      cnpg_tls_secret_name:
         type: "str"
         required: false
-        description: "The name of the secret containing the TLS certificate and key to enable TLS encryption for PostgreSQL; ignored unless enable_tls is true."
-      application_database:
+        description: "The name of the secret containing the TLS certificate and key to enable TLS encryption for PostgreSQL; ignored unless cnpg_enable_tls is true."
+      cnpg_application_database:
         type: "str"
         required: true
         description: "The name of the database to be created for the application."
-      application_user:
+      cnpg_application_user:
         type: "str"
         required: true
         description: "The name of the user to be created for the application."
-      application_password:
+      cnpg_application_password:
         type: "str"
         required: true
         description: "The password for the user to be created for the application."
-      postgresql_pod_memory_gi:
+      cnpg_postgresql_pod_memory_gi:
         type: "float"
         required: false
         description: "Memory request and limit size (Gi) for the PostgreSQL pods."
-      postgresql_config_parameters:
-        # Typical postgresql.conf configuration value names which would be passed by the caller of this role:
-        # port
-        # max_connections
-        # shared_buffers
-        # effective_cache_size
-        # maintenance_work_mem
-        # checkpoint_completion_target
-        # wal_buffers
-        # default_statistics_target
-        # random_page_cost
-        # effective_io_concurrency
-        # work_mem
-        # min_wal_size
-        # max_wal_size
-        # max_worker_processes
-        # max_parallel_workers_per_gather
-        # max_parallel_workers
-        # max_parallel_maintenance_workers
+      cnpg_postgresql_config_parameters:
         type: "dict"
         required: false
-        description: "Optional dictionary containing PostgreSQL configuration values to be put into postgresql.conf."
+        description: |
+          Optional dictionary containing PostgreSQL configuration values to be put into postgresql.conf.
+
+          NOTE: *EVERY* parameter in this dictionary *MUST* be provided as a string, even if it represents a numeric value.
+                Failure to provide values as strings may result in the deployment failing to be parsed by the CloudNativePG
+                Operator.
+
+          Typical postgresql.conf configuration value names which would be passed by the caller of this role:
+              port
+              max_connections
+              shared_buffers
+              effective_cache_size
+              maintenance_work_mem
+              checkpoint_completion_target
+              wal_buffers
+              default_statistics_target
+              random_page_cost
+              effective_io_concurrency
+              work_mem
+              min_wal_size
+              max_wal_size
+              max_worker_processes
+              max_parallel_workers_per_gather
+              max_parallel_workers
+              max_parallel_maintenance_workers

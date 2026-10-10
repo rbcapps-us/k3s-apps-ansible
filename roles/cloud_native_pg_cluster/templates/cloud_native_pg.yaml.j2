@@ -39,22 +39,22 @@ spec:
     sources:
 {{ cloud_native_pg_projected_volume_template_sources | to_nice_yaml(indent=2, sort_keys=false) | indent(width=8, first=true) }}
 {% endif %}
-{% if enable_tls %}
+{% if cnpg_enable_tls %}
   certificates:
-{% if root_ca_cert_secret_name != "" %}
-    serverCASecret: {{ root_ca_cert_secret_name | to_yaml | trim }}
+{% if cnpg_root_ca_cert_secret_name != "" %}
+    serverCASecret: {{ cnpg_root_ca_cert_secret_name | to_yaml | trim }}
 {% endif %}
-    serverTLSSecret: {{ tls_secret_name | to_yaml | trim }}
+    serverTLSSecret: {{ cnpg_tls_secret_name | to_yaml | trim }}
 {% endif %}
   postgresql:
-{% if enable_tls %}
+{% if cnpg_enable_tls %}
     pg_hba:
       - hostssl all all all cert
 {% endif %}
     parameters:
-{{ postgresql_config_parameters_render | to_nice_yaml(indent=2, sort_keys=false) | indent(width=6, first=true) }}
+{{ cnpg_postgresql_config_parameters_render | to_nice_yaml(indent=2, sort_keys=false) | indent(width=6, first=true) }}
   resources:
     requests:
-      memory: {{ ((postgresql_pod_memory_gi | string) + "Gi") | to_yaml | trim }}
+      memory: {{ ((cnpg_postgresql_pod_memory_gi | string) + "Gi") | to_yaml | trim }}
     limits:
-      memory: {{ ((postgresql_pod_memory_gi | string) + "Gi") | to_yaml | trim }}
+      memory: {{ ((cnpg_postgresql_pod_memory_gi | string) + "Gi") | to_yaml | trim }}
