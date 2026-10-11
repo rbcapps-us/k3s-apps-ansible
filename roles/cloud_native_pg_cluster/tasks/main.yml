@@ -13,7 +13,7 @@
       namespace: "{{ cnpg_kubernetes_namespace }}"
     cloud_native_pg_superuser_creds_data:
       username: "{{ 'postgres' | b64encode }}"
-      password: "{{ cnpg_application_password | b64encode }}"
+      password: "{{ cnpg_postgres_user_password | b64encode }}"
     cloud_native_pg_app_user_creds_data:
       username: "{{ cnpg_application_user | b64encode }}"
       password: "{{ cnpg_application_password | b64encode }}"

@@ -46,6 +46,10 @@ argument_specs:
         type: "str"
         required: true
         description: "The password for the user to be created for the application."
+      cnpg_postgres_user_password:
+        type: "str"
+        required: true
+        description: "The password for the postgres superuser."
       cnpg_postgresql_pod_memory_gi:
         type: "float"
         required: false

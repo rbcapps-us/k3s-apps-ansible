@@ -11,6 +11,7 @@ cnpg_tls_secret_name: ""
 cnpg_application_database: "cnpgtest"
 cnpg_application_user: "cnpgtestuser"
 cnpg_application_password: "cnpgtestpassword123"
+cnpg_postgres_user_password: "poStgrEs123"
 cnpg_postgresql_pod_memory_gi: 1
 cnpg_postgresql_config_parameters:
   max_connections: "1000"
