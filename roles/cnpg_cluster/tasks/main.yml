@@ -73,10 +73,16 @@
 
               set +e
               kubectl diff -f {{ (cnpg_cluster_tempdir.path + "/cloud_native_pg.yaml") | quote }}
-              retval="$?"
+              kubectl_diff_retval="$?"
               set -e
 
-              if [ "$retval" -ne 0 ]; then
+              if [ "$kubectl_diff_retval" -ne 0 ]; then
+                  # Exit code 1 from kubectl diff indicates differences were found.
+                  # Any other non-zero exit code indicates an unexpected error.
+                  if [ "$kubectl_diff_retval" -ne 1 ]; then
+                      echo "kubectl diff failed with unexpected return code $kubectl_diff_retval" >&2
+                      exit "$kubectl_diff_retval"
+                  fi
                   kubectl apply -f {{ (cnpg_cluster_tempdir.path + "/cloud_native_pg.yaml") | quote }}
                   exit 99
               fi
