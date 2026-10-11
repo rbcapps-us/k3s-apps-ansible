@@ -2,18 +2,18 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ cloud_native_pg_externally_accessible_service_name | to_yaml | trim }}
-  namespace: {{ cnpg_kubernetes_namespace | to_yaml | trim }}
+  namespace: {{ cnpg_cluster_kubernetes_namespace | to_yaml | trim }}
   labels:
-    cnpg.io/cluster: {{ cnpg_database_cluster_name | to_yaml | trim }}
+    cnpg.io/cluster: {{ cnpg_cluster_database_cluster_name | to_yaml | trim }}
 spec:
   type: LoadBalancer
   ports:
   - name: postgres
-    port: {{ cnpg_postgresql_external_port | int | to_yaml | trim }}
+    port: {{ cnpg_cluster_postgresql_external_port | int | to_yaml | trim }}
     protocol: TCP
     targetPort: 5432
   selector:
-    cnpg.io/cluster: {{ cnpg_database_cluster_name | to_yaml | trim }}
+    cnpg.io/cluster: {{ cnpg_cluster_database_cluster_name | to_yaml | trim }}
     cnpg.io/instanceRole: primary
   ipFamilyPolicy: SingleStack
   sessionAffinity: None

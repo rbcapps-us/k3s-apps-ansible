@@ -1,1 +1,0 @@
-roles/cloud_native_pg_cluster/ var-naming[no-role-prefix]

@@ -3,32 +3,32 @@
   become: true
   become_user: '{{ kube_api_user }}'
   vars:
-    cloud_native_pg_superuser_creds_secret_name: "{{ cnpg_database_cluster_name }}-app-superuser-creds"
-    cloud_native_pg_app_user_creds_secret_name: "{{ cnpg_database_cluster_name }}-app-user-creds"
+    cloud_native_pg_superuser_creds_secret_name: "{{ cnpg_cluster_database_cluster_name }}-app-superuser-creds"
+    cloud_native_pg_app_user_creds_secret_name: "{{ cnpg_cluster_database_cluster_name }}-app-user-creds"
     cloud_native_pg_superuser_creds_metadata:
       name: "{{ cloud_native_pg_superuser_creds_secret_name }}"
-      namespace: "{{ cnpg_kubernetes_namespace }}"
+      namespace: "{{ cnpg_cluster_kubernetes_namespace }}"
     cloud_native_pg_app_user_creds_metadata:
       name: "{{ cloud_native_pg_app_user_creds_secret_name }}"
-      namespace: "{{ cnpg_kubernetes_namespace }}"
+      namespace: "{{ cnpg_cluster_kubernetes_namespace }}"
     cloud_native_pg_superuser_creds_data:
       username: "{{ 'postgres' | b64encode }}"
-      password: "{{ cnpg_postgres_user_password | b64encode }}"
+      password: "{{ cnpg_cluster_postgres_user_password | b64encode }}"
     cloud_native_pg_app_user_creds_data:
-      username: "{{ cnpg_application_user | b64encode }}"
-      password: "{{ cnpg_application_password | b64encode }}"
+      username: "{{ cnpg_cluster_application_user | b64encode }}"
+      password: "{{ cnpg_cluster_application_password | b64encode }}"
     cloud_native_pg_manifest_metadata:
-      name: "{{ cnpg_database_cluster_name }}"
-      namespace: "{{ cnpg_kubernetes_namespace }}"
+      name: "{{ cnpg_cluster_database_cluster_name }}"
+      namespace: "{{ cnpg_cluster_kubernetes_namespace }}"
     cloud_native_pg_manifest_bootstrap_initdb:
-      database: "{{ cnpg_application_database }}"
-      owner: "{{ cnpg_application_user }}"
+      database: "{{ cnpg_cluster_application_database }}"
+      owner: "{{ cnpg_cluster_application_user }}"
       secret:
         name: "{{ cloud_native_pg_app_user_creds_secret_name }}"
     cloud_native_pg_projected_volume_template_sources: []
-    cnpg_postgresql_config_parameters_render: |
-      {{ cloud_native_postgresql_config_base_parameters | combine(cnpg_postgresql_config_parameters) }}
-    cloud_native_pg_externally_accessible_service_name: '{{ (cnpg_database_cluster_name + "-external") }}'
+    cnpg_cluster_postgresql_config_parameters_render: |
+      {{ cloud_native_postgresql_config_base_parameters | combine(cnpg_cluster_postgresql_config_parameters) }}
+    cloud_native_pg_externally_accessible_service_name: '{{ (cnpg_cluster_database_cluster_name + "-external") }}'
   block:
     - name: "Create the Kubernetes namespace for the CloudNativePG Cluster"
       ansible.builtin.shell:
@@ -36,25 +36,25 @@
           set -euo pipefail
 
           set +e
-          kubectl get ns {{ cnpg_kubernetes_namespace | quote }} >/dev/null 2>&1
+          kubectl get ns {{ cnpg_cluster_kubernetes_namespace | quote }} >/dev/null 2>&1
           retval="$?"
           set -e
 
           if [ "$retval" -ne 0 ]; then
-              kubectl create ns {{ cnpg_kubernetes_namespace | quote }}
+              kubectl create ns {{ cnpg_cluster_kubernetes_namespace | quote }}
               exit 99
           fi
       args:
         executable: /bin/bash
-      register: cloud_native_pg_cluster_namespace_create_result
-      changed_when: "cloud_native_pg_cluster_namespace_create_result.rc == 99"
-      failed_when: "cloud_native_pg_cluster_namespace_create_result.rc not in [0, 99]"
+      register: cnpg_cluster_namespace_create_result
+      changed_when: "cnpg_cluster_namespace_create_result.rc == 99"
+      failed_when: "cnpg_cluster_namespace_create_result.rc not in [0, 99]"
 
     - name: "Create a temporary work directory for the CloudNativePG Cluster manifest"
       ansible.builtin.tempfile:
         state: directory
         suffix: cloud_native_pg
-      register: cloud_native_pg_cluster_tempdir
+      register: cnpg_cluster_tempdir
       changed_when: false
 
     - name: "Template and deploy the CloudNativePG Cluster manifest; delete the temporary directory"
@@ -62,7 +62,7 @@
         - name: "Template the CloudNativePG cluster manifest"
           ansible.builtin.template:
             src: cloud_native_pg.yaml.j2
-            dest: "{{ cloud_native_pg_cluster_tempdir.path }}/cloud_native_pg.yaml"
+            dest: "{{ cnpg_cluster_tempdir.path }}/cloud_native_pg.yaml"
             mode: "0644"
           changed_when: false
 
@@ -72,27 +72,27 @@
               set -euo pipefail
 
               set +e
-              kubectl diff -f {{ (cloud_native_pg_cluster_tempdir.path + "/cloud_native_pg.yaml") | quote }}
+              kubectl diff -f {{ (cnpg_cluster_tempdir.path + "/cloud_native_pg.yaml") | quote }}
               retval="$?"
               set -e
 
               if [ "$retval" -ne 0 ]; then
-                  kubectl apply -f {{ (cloud_native_pg_cluster_tempdir.path + "/cloud_native_pg.yaml") | quote }}
+                  kubectl apply -f {{ (cnpg_cluster_tempdir.path + "/cloud_native_pg.yaml") | quote }}
                   exit 99
               fi
           args:
             executable: /bin/bash
-          register: cloud_native_pg_cluster_apply_result
-          changed_when: "cloud_native_pg_cluster_apply_result.rc == 99"
-          failed_when: "cloud_native_pg_cluster_apply_result.rc not in [0, 99]"
+          register: cnpg_cluster_apply_result
+          changed_when: "cnpg_cluster_apply_result.rc == 99"
+          failed_when: "cnpg_cluster_apply_result.rc not in [0, 99]"
 
         - name: "Create the CloudNativePG externally-accessible Service"
-          when: cnpg_expose_postgresql_port_externally
+          when: cnpg_cluster_expose_postgresql_port_externally
           block:
             - name: "Create the CloudNativePG externally-accessible Service manifest"
               ansible.builtin.template:
                 src: "cnpg-postgresql-external-service.yaml.j2"
-                dest: "{{ cloud_native_pg_cluster_tempdir.path }}/cnpg-postgresql-external-service.yaml"
+                dest: "{{ cnpg_cluster_tempdir.path }}/cnpg-postgresql-external-service.yaml"
                 mode: "0644"
               changed_when: false
 
@@ -102,12 +102,12 @@
                   set -euo pipefail
 
                   set +e
-                  kubectl diff -f {{ (cloud_native_pg_cluster_tempdir.path + "/cnpg-postgresql-external-service.yaml") | quote }}
+                  kubectl diff -f {{ (cnpg_cluster_tempdir.path + "/cnpg-postgresql-external-service.yaml") | quote }}
                   retval="$?"
                   set -e
 
                   if [ "$retval" -ne 0 ]; then
-                      kubectl apply -f {{ (cloud_native_pg_cluster_tempdir.path + "/cnpg-postgresql-external-service.yaml") | quote }}
+                      kubectl apply -f {{ (cnpg_cluster_tempdir.path + "/cnpg-postgresql-external-service.yaml") | quote }}
                       exit 99
                   fi
               args:
@@ -117,19 +117,19 @@
               failed_when: "cloud_native_pg_externally_accessible_service_apply_result.rc not in [0, 99]"
 
         - name: "Delete the CloudNativePG externally-accessible Service, if it exists"
-          when: "not cnpg_expose_postgresql_port_externally"
+          when: "not cnpg_cluster_expose_postgresql_port_externally"
           ansible.builtin.shell: |
             set -e
             set -o pipefail
 
             set +e
-            kubectl -n {{ cnpg_kubernetes_namespace | quote }} get svc {{ cloud_native_pg_externally_accessible_service_name | quote }} >/dev/null 2>&1
+            kubectl -n {{ cnpg_cluster_kubernetes_namespace | quote }} get svc {{ cloud_native_pg_externally_accessible_service_name | quote }} >/dev/null 2>&1
             retval="$?"
             set -e
 
             if [ "$retval" -eq 0 ]; then
                 printf "Deleting the %s service.\n" {{ cloud_native_pg_externally_accessible_service_name | quote }}
-                kubectl -n {{ cnpg_kubernetes_namespace | quote }} delete svc {{ cloud_native_pg_externally_accessible_service_name | quote }}
+                kubectl -n {{ cnpg_cluster_kubernetes_namespace | quote }} delete svc {{ cloud_native_pg_externally_accessible_service_name | quote }}
                 exit 99
             fi
 
@@ -143,6 +143,6 @@
       always:
         - name: "Remove the temporary work directory for the CloudNativePG Cluster manifest"
           ansible.builtin.file:
-            path: "{{ cloud_native_pg_cluster_tempdir.path }}"
+            path: "{{ cnpg_cluster_tempdir.path }}"
             state: absent
           changed_when: false

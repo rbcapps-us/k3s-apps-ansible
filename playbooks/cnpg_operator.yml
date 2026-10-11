@@ -4,5 +4,5 @@
   roles:
     - role: init
       tags: [always]
-    - role: cloud_native_pg_operator
-      tags: [cloud_native_pg_operator]
+    - role: cnpg_operator
+      tags: [cnpg_operator]

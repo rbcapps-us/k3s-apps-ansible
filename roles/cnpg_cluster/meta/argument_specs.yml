@@ -2,59 +2,59 @@ argument_specs:
   main:
     short_description: "The main entry point for the cloud_native_pg role."
     options:
-      cnpg_kubernetes_namespace:
+      cnpg_cluster_kubernetes_namespace:
         type: "str"
         required: true
         description: "The Kubernetes namespace into which to install the CloudNativePG operator and cluster."
-      cnpg_database_cluster_name:
+      cnpg_cluster_database_cluster_name:
         type: "str"
         required: true
         description: "The name of the CloudNativePG database cluster."
-      cnpg_expose_postgresql_port_externally:
+      cnpg_cluster_expose_postgresql_port_externally:
         type: "bool"
         required: false
         description: "Set to true to expose the PostgreSQL port externally (on the cluster nodes)."
-      cnpg_postgresql_external_port:
+      cnpg_cluster_postgresql_external_port:
         type: "int"
         required: false
         description: |
           Port number on which to expose PostgreSQL externally (on the cluster nodes)
-          if cnpg_expose_postgresql_port_externally is true.
-      cnpg_enable_tls:
+          if cnpg_cluster_expose_postgresql_port_externally is true.
+      cnpg_cluster_enable_tls:
         type: "bool"
         required: false
-        description: "Set to true, and pass cnpg_tls_secret_name to enable TLS encryption for PostgreSQL."
-      cnpg_root_ca_cert_secret_name:
+        description: "Set to true, and pass cnpg_cluster_tls_secret_name to enable TLS encryption for PostgreSQL."
+      cnpg_cluster_root_ca_cert_secret_name:
         type: "str"
         required: false
-        description: "The name of the secret containing the root CA certificate; ignored unless cnpg_enable_tls is true."
-      cnpg_tls_secret_name:
+        description: "The name of the secret containing the root CA certificate; ignored unless cnpg_cluster_enable_tls is true."
+      cnpg_cluster_tls_secret_name:
         type: "str"
         required: false
         description: |
           The name of the secret containing the TLS certificate and key to enable TLS encryption for PostgreSQL;
-          ignored unless cnpg_enable_tls is true.
-      cnpg_application_database:
+          ignored unless cnpg_cluster_enable_tls is true.
+      cnpg_cluster_application_database:
         type: "str"
         required: true
         description: "The name of the database to be created for the application."
-      cnpg_application_user:
+      cnpg_cluster_application_user:
         type: "str"
         required: true
         description: "The name of the user to be created for the application."
-      cnpg_application_password:
+      cnpg_cluster_application_password:
         type: "str"
         required: true
         description: "The password for the user to be created for the application."
-      cnpg_postgres_user_password:
+      cnpg_cluster_postgres_user_password:
         type: "str"
         required: true
         description: "The password for the postgres superuser."
-      cnpg_postgresql_pod_memory_gi:
+      cnpg_cluster_postgresql_pod_memory_gi:
         type: "float"
         required: false
         description: "Memory request and limit size (Gi) for the PostgreSQL pods."
-      cnpg_postgresql_config_parameters:
+      cnpg_cluster_postgresql_config_parameters:
         type: "dict"
         required: false
         description: |

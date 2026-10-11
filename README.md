@@ -36,12 +36,12 @@ Set environment variables for the example inventory:
 
 Install the CloudNativePG Kubernetes Operator (only required once per K3s cluster, unless upgrading to a newer version of the operator): 
 ```sh
-ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" roncemer.k3s_apps_ansible.cloud_native_pg_operator
+ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" roncemer.k3s_apps_ansible.cnpg_operator
 ```
 
 Deploy a CloudNativePG Database Cluster:
 ```sh
-ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" roncemer.k3s_apps_ansible.cloud_native_pg_cluster
+ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" roncemer.k3s_apps_ansible.cnpg_cluster
 ```
 
 After the cluster starts up, you should be able to access CloudNativePG on port 5432 of any node in the K3s cluster.

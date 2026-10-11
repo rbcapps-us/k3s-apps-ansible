@@ -1,19 +1,19 @@
 # This cluster uses sudo.ws.  Without the next line, all tasks with "become: true" will fail.
 ansible_become_exe: /usr/bin/sudo.ws
 
-cnpg_kubernetes_namespace: "cnpg-test"
-cnpg_database_cluster_name: "cnpg-test-cluster"
-cnpg_expose_postgresql_port_externally: true
-cnpg_postgresql_external_port: 5432
-cnpg_enable_tls: false
-cnpg_root_ca_cert_secret_name: ""
-cnpg_tls_secret_name: ""
-cnpg_application_database: "cnpgtest"
-cnpg_application_user: "cnpgtestuser"
-cnpg_application_password: "cnpgtestpassword123"
-cnpg_postgres_user_password: "poStgrEs123"
-cnpg_postgresql_pod_memory_gi: 1
-cnpg_postgresql_config_parameters:
+cnpg_cluster_kubernetes_namespace: "cnpg-test"
+cnpg_cluster_database_cluster_name: "cnpg-test-cluster"
+cnpg_cluster_expose_postgresql_port_externally: true
+cnpg_cluster_postgresql_external_port: 5432
+cnpg_cluster_enable_tls: false
+cnpg_cluster_root_ca_cert_secret_name: ""
+cnpg_cluster_tls_secret_name: ""
+cnpg_cluster_application_database: "cnpgtest"
+cnpg_cluster_application_user: "cnpgtestuser"
+cnpg_cluster_application_password: "cnpgtestpassword123"
+cnpg_cluster_postgres_user_password: "poStgrEs123"
+cnpg_cluster_postgresql_pod_memory_gi: 1
+cnpg_cluster_postgresql_config_parameters:
   max_connections: "1000"
   shared_buffers: "32MB"
   effective_cache_size: "32MB"

@@ -4,5 +4,5 @@
   roles:
     - role: init
       tags: [always]
-    - role: cloud_native_pg_cluster
-      tags: [cloud_native_pg_cluster]
+    - role: cnpg_cluster
+      tags: [cnpg_cluster]
