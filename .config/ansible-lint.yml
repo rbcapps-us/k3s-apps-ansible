@@ -1,0 +1,5 @@
+profile: production
+skip_list:
+  - 'name[template]'
+  - 'var-naming[no-role-prefix]'
+  - 'yaml[line-length]'

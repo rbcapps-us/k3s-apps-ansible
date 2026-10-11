@@ -17,7 +17,9 @@ argument_specs:
       cnpg_postgresql_external_port:
         type: "int"
         required: false
-        description: "Port number on which to expose PostgreSQL externally (on the cluster nodes) if cnpg_expose_postgresql_port_externally is true."
+        description: |
+          Port number on which to expose PostgreSQL externally (on the cluster nodes)
+          if cnpg_expose_postgresql_port_externally is true.
       cnpg_enable_tls:
         type: "bool"
         required: false
@@ -29,7 +31,9 @@ argument_specs:
       cnpg_tls_secret_name:
         type: "str"
         required: false
-        description: "The name of the secret containing the TLS certificate and key to enable TLS encryption for PostgreSQL; ignored unless cnpg_enable_tls is true."
+        description: |
+          The name of the secret containing the TLS certificate and key to enable TLS encryption for PostgreSQL;
+          ignored unless cnpg_enable_tls is true.
       cnpg_application_database:
         type: "str"
         required: true
