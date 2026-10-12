@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Secret
 metadata:
-{{ cloud_native_pg_superuser_creds_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+{{ cnpg_cluster_superuser_creds_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
 type: kubernetes.io/basic-auth
 data:
-{{ cloud_native_pg_superuser_creds_data | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+{{ cnpg_cluster_superuser_creds_data | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
 
 ---
 
 apiVersion: v1
 kind: Secret
 metadata:
-{{ cloud_native_pg_app_user_creds_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+{{ cnpg_cluster_app_user_creds_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
 type: kubernetes.io/basic-auth
 data:
-{{ cloud_native_pg_app_user_creds_data | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+{{ cnpg_cluster_app_user_creds_data | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
 
 ---
 
@@ -58,7 +58,7 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-{{ cloud_native_pg_manifest_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
+{{ cnpg_cluster_manifest_metadata | to_nice_yaml(indent=2, sort_keys=false) | indent(width=2, first=true) }}
 spec:
   instances: 3
   storage:
@@ -66,15 +66,15 @@ spec:
   ephemeralVolumesSizeLimit:
     shm: 512Mi
   superuserSecret:
-    name: {{ cloud_native_pg_superuser_creds_secret_name | to_yaml | trim }}
+    name: {{ cnpg_cluster_superuser_creds_secret_name | to_yaml | trim }}
   enableSuperuserAccess: true
   bootstrap:
     initdb:
-{{ cloud_native_pg_manifest_bootstrap_initdb | to_nice_yaml(indent=2, sort_keys=false) | indent(width=6, first=true) }}
-{%if (cloud_native_pg_projected_volume_template_sources | length) > 0 %}
+{{ cnpg_cluster_manifest_bootstrap_initdb | to_nice_yaml(indent=2, sort_keys=false) | indent(width=6, first=true) }}
+{%if (cnpg_cluster_projected_volume_template_sources | length) > 0 %}
   projectedVolumeTemplate:
     sources:
-{{ cloud_native_pg_projected_volume_template_sources | to_nice_yaml(indent=2, sort_keys=false) | indent(width=8, first=true) }}
+{{ cnpg_cluster_projected_volume_template_sources | to_nice_yaml(indent=2, sort_keys=false) | indent(width=8, first=true) }}
 {% endif %}
 {% if cnpg_cluster_enable_tls %}
   certificates:

@@ -1,4 +1,4 @@
-cloud_native_postgresql_config_base_parameters:
+cnpg_cluster_postgresql_config_base_parameters:
   log_timezone: "Etc/UTC"
   datestyle: "iso, mdy"
   timezone: "Etc/UTC"

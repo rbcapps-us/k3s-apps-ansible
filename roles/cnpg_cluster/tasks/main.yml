@@ -3,32 +3,32 @@
   become: true
   become_user: '{{ kube_api_user }}'
   vars:
-    cloud_native_pg_superuser_creds_secret_name: "{{ cnpg_cluster_database_cluster_name }}-app-superuser-creds"
-    cloud_native_pg_app_user_creds_secret_name: "{{ cnpg_cluster_database_cluster_name }}-app-user-creds"
-    cloud_native_pg_superuser_creds_metadata:
-      name: "{{ cloud_native_pg_superuser_creds_secret_name }}"
+    cnpg_cluster_superuser_creds_secret_name: "{{ cnpg_cluster_database_cluster_name }}-app-superuser-creds"
+    cnpg_cluster_app_user_creds_secret_name: "{{ cnpg_cluster_database_cluster_name }}-app-user-creds"
+    cnpg_cluster_superuser_creds_metadata:
+      name: "{{ cnpg_cluster_superuser_creds_secret_name }}"
       namespace: "{{ cnpg_cluster_kubernetes_namespace }}"
-    cloud_native_pg_app_user_creds_metadata:
-      name: "{{ cloud_native_pg_app_user_creds_secret_name }}"
+    cnpg_cluster_app_user_creds_metadata:
+      name: "{{ cnpg_cluster_app_user_creds_secret_name }}"
       namespace: "{{ cnpg_cluster_kubernetes_namespace }}"
-    cloud_native_pg_superuser_creds_data:
+    cnpg_cluster_superuser_creds_data:
       username: "{{ 'postgres' | b64encode }}"
       password: "{{ cnpg_cluster_postgres_user_password | b64encode }}"
-    cloud_native_pg_app_user_creds_data:
+    cnpg_cluster_app_user_creds_data:
       username: "{{ cnpg_cluster_application_user | b64encode }}"
       password: "{{ cnpg_cluster_application_password | b64encode }}"
-    cloud_native_pg_manifest_metadata:
+    cnpg_cluster_manifest_metadata:
       name: "{{ cnpg_cluster_database_cluster_name }}"
       namespace: "{{ cnpg_cluster_kubernetes_namespace }}"
-    cloud_native_pg_manifest_bootstrap_initdb:
+    cnpg_cluster_manifest_bootstrap_initdb:
       database: "{{ cnpg_cluster_application_database }}"
       owner: "{{ cnpg_cluster_application_user }}"
       secret:
-        name: "{{ cloud_native_pg_app_user_creds_secret_name }}"
-    cloud_native_pg_projected_volume_template_sources: []
+        name: "{{ cnpg_cluster_app_user_creds_secret_name }}"
+    cnpg_cluster_projected_volume_template_sources: []
     cnpg_cluster_postgresql_config_parameters_render: |
-      {{ cloud_native_postgresql_config_base_parameters | combine(cnpg_cluster_postgresql_config_parameters) }}
-    cloud_native_pg_externally_accessible_service_name: '{{ (cnpg_cluster_database_cluster_name + "-external") }}'
+      {{ cnpg_cluster_postgresql_config_base_parameters | combine(cnpg_cluster_postgresql_config_parameters) }}
+    cnpg_cluster_externally_accessible_service_name: '{{ (cnpg_cluster_database_cluster_name + "-external") }}'
   block:
     - name: "Create the Kubernetes namespace for the CloudNativePG Cluster"
       ansible.builtin.shell:
@@ -129,17 +129,17 @@
             set -o pipefail
 
             set +e
-            kubectl -n {{ cnpg_cluster_kubernetes_namespace | quote }} get svc {{ cloud_native_pg_externally_accessible_service_name | quote }} >/dev/null 2>&1
+            kubectl -n {{ cnpg_cluster_kubernetes_namespace | quote }} get svc {{ cnpg_cluster_externally_accessible_service_name | quote }} >/dev/null 2>&1
             retval="$?"
             set -e
 
             if [ "$retval" -eq 0 ]; then
-                printf "Deleting the %s service.\n" {{ cloud_native_pg_externally_accessible_service_name | quote }}
-                kubectl -n {{ cnpg_cluster_kubernetes_namespace | quote }} delete svc {{ cloud_native_pg_externally_accessible_service_name | quote }}
+                printf "Deleting the %s service.\n" {{ cnpg_cluster_externally_accessible_service_name | quote }}
+                kubectl -n {{ cnpg_cluster_kubernetes_namespace | quote }} delete svc {{ cnpg_cluster_externally_accessible_service_name | quote }}
                 exit 99
             fi
 
-            printf "The %s service does not exist; not deleting.\n" {{ cloud_native_pg_externally_accessible_service_name | quote }}
+            printf "The %s service does not exist; not deleting.\n" {{ cnpg_cluster_externally_accessible_service_name | quote }}
           args:
             executable: /bin/bash
           register: external_postgresql_service_manifest_removal_result
