@@ -18,6 +18,43 @@ data:
 
 ---
 
+{% if
+    cnpg_cluster_enable_tls
+    and cnpg_cluster_tls_secret_name != ""
+    and cnpg_cluster_cert_manager_tls_cert_auto_generate_params is not none
+%}
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ cnpg_cluster_tls_secret_name | to_yaml | trim }}
+  namespace: {{ cnpg_cluster_kubernetes_namespace | to_yaml | trim }}
+spec:
+  secretName: {{ cnpg_cluster_tls_secret_name | to_yaml | trim }}
+  dnsNames:
+{{ cnpg_cluster_cert_manager_tls_cert_auto_generate_params.dns_names | to_nice_yaml(indent=2, sort_keys=false) | indent(width=4, first=true) }}
+  issuerRef:
+    name: {{ cnpg_cluster_cert_manager_tls_cert_auto_generate_params.cluster_issuer_name | to_yaml | trim }}
+    kind: ClusterIssuer
+    group: cert-manager.io
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 4096
+    rotationPolicy: Always
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+  subject:
+    organizations:
+      - cert-manager
+
+---
+{% endif %}
+
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:

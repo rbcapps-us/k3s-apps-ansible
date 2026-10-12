@@ -4,6 +4,7 @@ cnpg_cluster_postgresql_external_port: 5432
 cnpg_cluster_enable_tls: false
 cnpg_cluster_root_ca_cert_secret_name: ""
 cnpg_cluster_tls_secret_name: ""
+cnpg_cluster_cert_manager_tls_cert_auto_generate_params: null
 
 cnpg_cluster_postgresql_pod_memory_gi: 1
 cnpg_cluster_postgresql_config_parameters:
