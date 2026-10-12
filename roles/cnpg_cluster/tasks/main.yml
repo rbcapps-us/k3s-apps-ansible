@@ -61,7 +61,7 @@
       block:
         - name: "Template the CloudNativePG cluster manifest"
           ansible.builtin.template:
-            src: cloud_native_pg.yaml.j2
+            src: cnpg-cluster.yaml.j2
             dest: "{{ cnpg_cluster_tempdir.path }}/cloud_native_pg.yaml"
             mode: "0644"
           changed_when: false
