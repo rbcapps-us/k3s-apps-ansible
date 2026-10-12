@@ -5,9 +5,12 @@ cnpg_cluster_kubernetes_namespace: "cnpg-test"
 cnpg_cluster_database_cluster_name: "cnpg-test-cluster"
 cnpg_cluster_expose_postgresql_port_externally: true
 cnpg_cluster_postgresql_external_port: 5432
+
 cnpg_cluster_enable_tls: false
 cnpg_cluster_root_ca_cert_secret_name: ""
 cnpg_cluster_tls_secret_name: ""
+cnpg_cluster_cert_manager_tls_cert_auto_generate_params: null
+
 cnpg_cluster_application_database: "cnpgtest"
 cnpg_cluster_application_user: "cnpgtestuser"
 cnpg_cluster_application_password: "cnpgtestpassword123"
