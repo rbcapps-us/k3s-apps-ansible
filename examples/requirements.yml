@@ -1,4 +1,4 @@
 collections:
-  - name: https://github.com/roncemer/k3s-apps-ansible
+  - name: https://github.com/rbcapps-us/k3s-apps-ansible
     type: git
     version: main

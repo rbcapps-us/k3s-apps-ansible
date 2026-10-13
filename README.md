@@ -1,6 +1,6 @@
-# Ansible Collection - roncemer.k3s_apps_ansible
+# Ansible Collection - rbcapps_us.k3s_apps_ansible
 
-An Ansible collection to easily install various applications on a K3s cluster which has been provisioned by the `roncemer/k3s_cluster_ansible` Ansible Galaxy collection
+An Ansible collection to easily install various applications on a K3s cluster which has been provisioned by the `rbcapps_us.k3s_cluster_ansible` Ansible Galaxy collection
 
 ## Test using the examples directory
 

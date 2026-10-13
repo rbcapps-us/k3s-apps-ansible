@@ -33,7 +33,7 @@ Set environment variables for the example inventory:
 
 Install the CloudNativePG Kubernetes Operator (only required once per K3s cluster, unless upgrading to a newer version of the operator): 
 ```sh
-ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" roncemer.k3s_apps_ansible.cnpg_operator
+ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" rbcapps_us.k3s_apps_ansible.cnpg_operator
 ```
 
 ## Deploy a CloudNativePG Database Cluster
@@ -67,10 +67,10 @@ cnpg_cluster_cert_manager_tls_cert_auto_generate_params:
 
 Deploy a CloudNativePG Database Cluster:
 ```sh
-ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" roncemer.k3s_apps_ansible.cnpg_cluster
+ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" rbcapps_us.k3s_apps_ansible.cnpg_cluster
 ```
 
 After the cluster starts up, you should be able to access CloudNativePG on port 5432 of any node in the K3s cluster.
 
-In the cluster's inventory, you can set up a Keepalived Cluster Load Balancer, and set up a TCP load balancer for port 5432, to make the CloudNativePG service highly available on a fixed IP address and port.  See the documentation in the `roncemer/k3s_cluster_ansible` Ansible Galaxy collection for details.
+In the cluster's inventory, you can set up a Keepalived Cluster Load Balancer, and set up a TCP load balancer for port 5432, to make the CloudNativePG service highly available on a fixed IP address and port.  See the documentation in the `rbcapps_us.k3s_cluster_ansible` Ansible Galaxy collection for details.
 
