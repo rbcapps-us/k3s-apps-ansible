@@ -1,4 +1,4 @@
-[all_hosts]
+[k3s_nodes]
 k3s-test-01.local
 k3s-test-02.local
 k3s-test-03.local

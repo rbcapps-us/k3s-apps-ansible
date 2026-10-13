@@ -1,5 +1,5 @@
 - name: "Install or upgrade a CloudNativePG Kubernetes Database Cluster"
-  hosts: all_hosts
+  hosts: k3s_nodes
 
   roles:
     - role: init
