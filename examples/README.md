@@ -74,3 +74,42 @@ After the cluster starts up, you should be able to access CloudNativePG on port 
 
 In the cluster's inventory, you can set up a Keepalived Cluster Load Balancer, and set up a TCP load balancer for port 5432, to make the CloudNativePG service highly available on a fixed IP address and port.  See the documentation in the `rbcapps_us.k3s_cluster_ansible` Ansible Galaxy collection for details.
 
+## Playbook Defaults
+
+Shared defaults and component installation switches are stored in [roles/init/defaults/main.yml](roles/init/defaults/main.yml) and documented in [roles/init/meta/argument_specs.yml](roles/init/meta/argument_specs.yml).  Role-specific defaults and their documentation are stored in each role's `defaults/main.yml` and `meta/argument_specs.yml` under [roles](roles).  For example, CloudNativePG Cluster settings are in [roles/cnpg_cluster/defaults/main.yml](roles/cnpg_cluster/defaults/main.yml) and [roles/cnpg_cluster/meta/argument_specs.yml](roles/cnpg_cluster/meta/argument_specs.yml).  You can override these values by setting them in the inventory, or, if you are calling roles directly from your own playbooks, by explicitly setting facts or passing vars to the roles which you call.
+
+## Re-using Roles in your own Playbooks
+
+If you need to write your own playbooks, as opposed to just using the playbooks which are provided in this collection, you can simply make a local copy of any of the above-referenced playbooks in your own project, and do your customizations.
+
+## Developing this Project
+
+Install `ansible-lint` on MacOS:
+```sh
+brew install ansible-lint
+```
+
+Validate playbooks and roles for lint errors:
+```sh
+./validate-lint
+```
+
+## Publishing a new version of the Galaxy collection
+
+* Update the version in galaxy.yml
+* Run:
+    ```sh
+    ansible-galaxy collection build
+    ```
+* Publish the collection, either by CLI:
+    ```sh
+    ansible-galaxy collection publish rbcapps_us-k3s_apps_ansible-1.0.0.tar.gz --api-key <ansible-galaxy-token-goes-here>
+    ```
+  or by going to [https://galaxy.ansible.com/ui/my-namespaces/](https://galaxy.ansible.com/ui/my-namespaces/), clicking *View collections* under the correct namespace, clicking *Upload collection*, and selecting the collection tarball.
+
+* Create and push a git tag with the same version as the collection version (replace 1.0.0 with the correct version everywhere in the commands below):
+    ```sh
+    git tag v1.0.0
+    git push origin v1.0.0
+    ```
+* In GitHub, create a release from the new tag.  Upload the newly built tarball to the new release.
