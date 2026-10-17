@@ -1,4 +1,4 @@
 .ansible
 *.swp
 examples/inventories/k3s-test-cluster/ansible-become-password.txt
-rbcapps_us-k3s_apps_ansible-*.tar.gz
+rbcapps_us-k3s_cloud_native_pg_ansible-*.tar.gz

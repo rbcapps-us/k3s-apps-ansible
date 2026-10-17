@@ -33,7 +33,7 @@ Set environment variables for the example inventory:
 
 Install the CloudNativePG Kubernetes Operator (only required once per K3s cluster, unless upgrading to a newer version of the operator): 
 ```sh
-ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" rbcapps_us.k3s_apps_ansible.cnpg_operator
+ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" rbcapps_us.k3s_cloud_native_pg_ansible.cnpg_operator
 ```
 
 ## Deploy a CloudNativePG Database Cluster
@@ -67,7 +67,7 @@ cnpg_cluster_cert_manager_tls_cert_auto_generate_params:
 
 Deploy a CloudNativePG Database Cluster:
 ```sh
-ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" rbcapps_us.k3s_apps_ansible.cnpg_cluster
+ansible-playbook -i "$INVPATH" -u ansible --become-password-file "$BECOMEPWFILE" rbcapps_us.k3s_cloud_native_pg_ansible.cnpg_cluster
 ```
 
 After the cluster starts up, you should be able to access CloudNativePG on port 5432 of any node in the K3s cluster.
@@ -103,7 +103,7 @@ Validate playbooks and roles for lint errors:
     ```
 * Publish the collection, either by CLI:
     ```sh
-    ansible-galaxy collection publish rbcapps_us-k3s_apps_ansible-1.0.0.tar.gz --api-key <ansible-galaxy-token-goes-here>
+    ansible-galaxy collection publish rbcapps_us-k3s_cloud_native_pg_ansible-1.0.0.tar.gz --api-key <ansible-galaxy-token-goes-here>
     ```
   or by going to [https://galaxy.ansible.com/ui/my-namespaces/](https://galaxy.ansible.com/ui/my-namespaces/), clicking *View collections* under the correct namespace, clicking *Upload collection*, and selecting the collection tarball.
 
